@@ -7,17 +7,36 @@
 .app-header {
   text-align: center;
   margin-bottom: 2.5rem;
+  position: relative;
 }
 
 .app-header h1 {
   font-size: 2.5rem;
-  color: #0d5c8a;
+  color: var(--heading-color);
 }
 
 .app-header p {
   margin-top: 0.5rem;
-  color: #4a6d85;
+  color: var(--subtext-color);
   font-size: 1.05rem;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--toggle-bg);
+  border: 1.5px solid var(--toggle-border);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--heading-color);
 }
 
 .app-main {
@@ -34,15 +53,16 @@
 
 /* List card */
 .list-card {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 12px rgba(13, 92, 138, 0.1);
+  box-shadow: 0 2px 12px var(--card-shadow);
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
 .list-card h2 {
   font-size: 1.3rem;
-  color: #0d5c8a;
+  color: var(--heading-color);
   margin-bottom: 1rem;
 }
 
@@ -56,20 +76,22 @@
 .add-form input {
   flex: 1;
   padding: 0.5rem 0.75rem;
-  border: 1.5px solid #b0cfe0;
+  border: 1.5px solid var(--input-border);
   border-radius: 8px;
   font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.2s;
+  background: var(--input-bg);
+  color: var(--input-text);
+  transition: border-color 0.2s, background 0.3s, color 0.3s;
 }
 
 .add-form input:focus {
-  border-color: #0d5c8a;
+  border-color: var(--input-focus-border);
 }
 
 .add-form button {
   padding: 0.5rem 1rem;
-  background: #0d5c8a;
+  background: var(--btn-bg);
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -79,7 +101,7 @@
 }
 
 .add-form button:hover {
-  background: #0a4a70;
+  background: var(--btn-hover-bg);
 }
 
 /* Item list */
@@ -95,15 +117,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  background: #f0f8ff;
+  background: var(--item-row-bg);
   border-radius: 8px;
   font-size: 0.95rem;
+  transition: background 0.3s;
 }
 
 .delete-btn {
   background: transparent;
   border: none;
-  color: #c0392b;
+  color: var(--delete-color);
   cursor: pointer;
   font-size: 0.85rem;
   padding: 0 0.25rem;
@@ -112,23 +135,24 @@
 }
 
 .delete-btn:hover {
-  color: #922b21;
+  color: var(--delete-hover-color);
 }
 
 .empty-hint {
-  color: #7f9ab0;
+  color: var(--empty-hint-color);
   font-size: 0.9rem;
   font-style: italic;
 }
 
 /* Error banner */
 .error-banner {
-  background: #fdecea;
-  color: #c0392b;
-  border: 1px solid #f5c6c2;
+  background: var(--error-bg);
+  color: var(--error-color);
+  border: 1px solid var(--error-border);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
   font-size: 0.95rem;
   text-align: center;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }

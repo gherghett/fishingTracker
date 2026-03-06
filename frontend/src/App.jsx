@@ -6,6 +6,14 @@ function App() {
   const [fishes, setFishes] = useState([]);
   const [places, setPlaces] = useState([]);
   const [error, setError] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
 
   function showError(msg) {
     setError(msg);
@@ -80,6 +88,14 @@ function App() {
       <header className="app-header">
         <h1>🎣 ToFish</h1>
         <p>Track the fish you want to catch and the places you want to fish.</p>
+        <button
+          className="theme-toggle"
+          onClick={() => setDarkMode((prev) => !prev)}
+          aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
       </header>
       <main className="app-main">
         <ItemList
