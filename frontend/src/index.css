@@ -6,7 +6,18 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #e8f4f8;
+  background: linear-gradient(135deg, #e8f4f8, #d0ecf5, #e0f0f8, #c8e6f0);
+  background-size: 400% 400%;
+  animation: ocean-gradient 12s ease infinite;
   color: #1a2e3b;
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes ocean-gradient {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 0%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 100%; }
+  100% { background-position: 0% 50%; }
 }

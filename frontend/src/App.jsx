@@ -76,27 +76,37 @@ function App() {
 
   return (
     <div className="app">
+      <div className="bubbles" aria-hidden="true">
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+        <div className="bubble" />
+      </div>
       {error && <div className="error-banner" role="alert">{error}</div>}
       <header className="app-header">
-        <h1>🎣 ToFish</h1>
+        <h1><span className="title-emoji">{'\u{1F3A3}'}</span> ToFish</h1>
         <p>Track the fish you want to catch and the places you want to fish.</p>
       </header>
       <main className="app-main">
         <ItemList
           title="Fish to catch"
-          emoji="🐟"
+          emoji={'\u{1F41F}'}
           items={fishes}
           onAdd={addFish}
           onDelete={deleteFish}
-          placeholder="e.g. Pike, Salmon, Trout…"
+          placeholder="e.g. Pike, Salmon, Trout\u2026"
         />
         <ItemList
           title="Places to fish"
-          emoji="📍"
+          emoji={'\u{1F4CD}'}
           items={places}
           onAdd={addPlace}
           onDelete={deletePlace}
-          placeholder="e.g. Lake Vänern, River Dalälven…"
+          placeholder="e.g. Lake V\u00E4nern, River Dal\u00E4lven\u2026"
         />
       </main>
     </div>
