@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
   const [inputValue, setInputValue] = useState('');
-  const [removingId, setRemovingId] = useState(null);
+  const [exitingIds, setExitingIds] = useState(new Set());
   const [justAddedId, setJustAddedId] = useState(null);
   const buttonRef = useRef(null);
 
@@ -22,13 +22,17 @@ function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
     }
   }
 
-  function handleDelete(id) {
-    setRemovingId(id);
+  const handleDelete = useCallback((id) => {
+    setExitingIds((prev) => new Set(prev).add(id));
     setTimeout(() => {
+      setExitingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
       onDelete(id);
-      setRemovingId(null);
     }, 350);
-  }
+  }, [onDelete]);
 
   // Track the most recently added item for a special animation
   const prevCountRef = useRef(items.length);
@@ -65,7 +69,7 @@ function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
               key={item.id}
               className={
                 'item-row' +
-                (removingId === item.id ? ' removing' : '') +
+                (exitingIds.has(item.id) ? ' removing' : '') +
                 (justAddedId === item.id ? ' just-added' : '')
               }
             >
@@ -74,7 +78,7 @@ function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
                 className="delete-btn"
                 onClick={() => handleDelete(item.id)}
                 aria-label={`Remove ${item.name}`}
-                disabled={removingId === item.id}
+                disabled={exitingIds.has(item.id)}
               >
                 {'\u2715'}
               </button>
