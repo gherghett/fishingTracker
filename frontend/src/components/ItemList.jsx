@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
   const [inputValue, setInputValue] = useState('');
+  const [exitingIds, setExitingIds] = useState(new Set());
+  const [justAddedId, setJustAddedId] = useState(null);
+  const buttonRef = useRef(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -9,12 +12,43 @@ function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
     if (!trimmed) return;
     onAdd(trimmed);
     setInputValue('');
+
+    // Flash the button with a ripple
+    if (buttonRef.current) {
+      buttonRef.current.style.animation = 'ripple 0.5s ease-out';
+      setTimeout(() => {
+        if (buttonRef.current) buttonRef.current.style.animation = '';
+      }, 500);
+    }
   }
+
+  const handleDelete = useCallback((id) => {
+    setExitingIds((prev) => new Set(prev).add(id));
+    setTimeout(() => {
+      setExitingIds((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
+      onDelete(id);
+    }, 350);
+  }, [onDelete]);
+
+  // Track the most recently added item for a special animation
+  const prevCountRef = useRef(items.length);
+  if (items.length > prevCountRef.current) {
+    const newest = items[items.length - 1];
+    if (newest && newest.id !== justAddedId) {
+      setJustAddedId(newest.id);
+      setTimeout(() => setJustAddedId(null), 500);
+    }
+  }
+  prevCountRef.current = items.length;
 
   return (
     <section className="list-card">
       <h2>
-        {emoji} {title}
+        <span className="card-emoji">{emoji}</span> {title}
       </h2>
       <form className="add-form" onSubmit={handleSubmit}>
         <input
@@ -24,21 +58,29 @@ function ItemList({ title, emoji, items, onAdd, onDelete, placeholder }) {
           placeholder={placeholder}
           aria-label={`Add to ${title}`}
         />
-        <button type="submit">Add</button>
+        <button type="submit" ref={buttonRef}>Add</button>
       </form>
       {items.length === 0 ? (
         <p className="empty-hint">Nothing here yet — add one above!</p>
       ) : (
         <ul className="item-list">
           {items.map((item) => (
-            <li key={item.id} className="item-row">
+            <li
+              key={item.id}
+              className={
+                'item-row' +
+                (exitingIds.has(item.id) ? ' removing' : '') +
+                (justAddedId === item.id ? ' just-added' : '')
+              }
+            >
               <span>{item.name}</span>
               <button
                 className="delete-btn"
-                onClick={() => onDelete(item.id)}
+                onClick={() => handleDelete(item.id)}
                 aria-label={`Remove ${item.name}`}
+                disabled={exitingIds.has(item.id)}
               >
-                ✕
+                {'\u2715'}
               </button>
             </li>
           ))}

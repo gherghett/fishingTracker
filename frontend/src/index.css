@@ -6,7 +6,61 @@
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #e8f4f8;
+  background: linear-gradient(135deg, #e8f4f8, #d0ecf5, #e0f0f8, #c8e6f0);
+  background-size: 400% 400%;
+  animation: ocean-gradient 12s ease infinite;
   color: #1a2e3b;
   min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+@keyframes ocean-gradient {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 0%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 100%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Floating ambient light orbs */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #0d5c8a, transparent 70%);
+  top: -50px;
+  right: -80px;
+  animation: floatOrb 12s ease-in-out infinite;
+}
+
+body::after {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #2196f3, transparent 70%);
+  bottom: -40px;
+  left: -60px;
+  animation: floatOrb 10s ease-in-out infinite reverse;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.1); }
+  50% { transform: translate(-20px, -60px) scale(0.95); }
+  75% { transform: translate(15px, -30px) scale(1.05); }
+}
+
+/* Root z-index for content above orbs */
+#root {
+  position: relative;
+  z-index: 1;
 }
